@@ -1,4 +1,4 @@
- ;; .emacs.d/init.el
+;; .emacs.d/init.el
 
 ;; ===================================
 ;; MELPA Package Support
@@ -60,8 +60,11 @@
 (setq create-lockfiles nil)         ;; Don't create lock files
 (setq auto-save-default nil)        ;; Don't create auto save files
 (powerline-default-theme)           ;; enable powerline
+(move-text-default-bindings)        ;; Move text package default configuration. M - up/down
 (yas-global-mode 1)                 ;; Enable snippets
-(move-text-default-bindings)
+(menu-bar-mode -1)                  ;; Disable menu bar
+(tool-bar-mode -1)                  ;; Disable toolbar
+(add-to-list 'default-frame-alist '(fullscreen . maximized)) ;;Start maximized
 
 ;; ===================================
 ;; Ivy Customization
