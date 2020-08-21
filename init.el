@@ -65,6 +65,7 @@
 (menu-bar-mode -1)                  ;; Disable menu bar
 (tool-bar-mode -1)                  ;; Disable toolbar
 (add-to-list 'default-frame-alist '(fullscreen . maximized)) ;;Start maximized
+(setq inhibit-startup-screen t)
 
 ;; ===================================
 ;; Ivy Customization
