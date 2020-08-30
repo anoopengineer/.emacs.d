@@ -67,6 +67,7 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized)) ;;Start maximized
 (setq inhibit-startup-screen t)
 (setq-default cursor-type 'bar)     ;; Bar cursor rather than block
+(setq ring-bell-function 'ignore)   ;; disable alarm bell
 
 ;; ===================================
 ;; Custom key rebindings
