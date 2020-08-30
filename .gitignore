@@ -50,3 +50,4 @@ flycheck_*.el
 elpy
 projectile-bookmarks.eld
 transient
+ido.last

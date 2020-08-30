@@ -66,6 +66,7 @@
 (tool-bar-mode -1)                  ;; Disable toolbar
 (add-to-list 'default-frame-alist '(fullscreen . maximized)) ;;Start maximized
 (setq inhibit-startup-screen t)
+(setq-default cursor-type 'bar)     ;; Bar cursor rather than block
 
 ;; ===================================
 ;; Ivy Customization
