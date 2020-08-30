@@ -69,6 +69,10 @@
 (setq-default cursor-type 'bar)     ;; Bar cursor rather than block
 
 ;; ===================================
+;; Custom key rebindings
+;; ===================================
+(global-set-key (kbd "M-o") 'other-window)
+;; ===================================
 ;; Ivy Customization
 ;; ===================================
 (ivy-mode 1)
