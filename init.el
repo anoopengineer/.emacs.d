@@ -73,6 +73,7 @@
 ;; Custom key rebindings
 ;; ===================================
 (global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "M-p") 'aks-yank-line-below)
 
 ;; ===================================
 ;; IDO mode customization
