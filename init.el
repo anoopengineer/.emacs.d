@@ -74,6 +74,7 @@
 ;; ===================================
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "M-p") 'aks-yank-line-below)
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;; ===================================
 ;; IDO mode customization
