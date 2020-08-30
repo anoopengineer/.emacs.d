@@ -76,6 +76,7 @@
 (global-set-key (kbd "M-p") 'aks-yank-line-below)
 (global-set-key (kbd "C-x g") 'magit-status)
 
+
 ;; ===================================
 ;; IDO mode customization
 ;; ===================================
@@ -147,3 +148,18 @@
 
 
 
+(defun aks-yank-line-below ()
+  "copy current line and yank it to the next line.
+Cursor doesn't move."
+  (interactive)
+  (setq init-point (point))
+  (save-excursion
+    (beginning-of-line)
+    (setq beg-point (point))
+    (end-of-line)
+    (setq end-point (point))
+    (setq line-text (delete-and-extract-region end-point beg-point))
+    (insert line-text)
+    (newline)
+    (insert line-text))
+  (goto-char init-point))
