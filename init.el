@@ -68,6 +68,7 @@
 (setq inhibit-startup-screen t)
 (setq-default cursor-type 'bar)     ;; Bar cursor rather than block
 (setq ring-bell-function 'ignore)   ;; disable alarm bell
+(winner-mode 1)                     ;; enable winner mode
 
 ;; ===================================
 ;; Custom key rebindings
