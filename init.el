@@ -1,9 +1,32 @@
 ;; .emacs.d/init.el
 
-;; ===================================
-;; MELPA Package Support
-;; ===================================
-;; Enables basic packaging support
+;;;;;;;;;;;;;;;;;;;
+;; Preliminaries ;;
+;;;;;;;;;;;;;;;;;;;
+
+(setq debug-on-error t)                 ; Enter debugger on error
+(setq message-log-max 10000)            ; Keep more log messages
+
+;; Set GC threshold as high as possible for fast startup
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; Set GC threshold back to default value when idle
+(run-with-idle-timer
+ 10 nil
+ (lambda ()
+   (setq gc-cons-threshold (car (get 'gc-cons-threshold 'standard-value)))
+   (message "GC threshold restored to %S" gc-cons-threshold)))
+
+;; Force customize to put config in another file called custom.el and
+;; not in init.el
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(load custom-file 'noerror)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;      MELPA Package Support      ;;
+;; Enables basic packaging support ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'package)
 
 ;; Adds the Melpa archive to the list of available repositories
@@ -17,150 +40,18 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-;; Installs packages
-;;
-;; myPackages contains a list of package names
-(defvar myPackages
-  '(better-defaults                 ;; Set up some better Emacs defaults
-    material-theme                  ;; Theme
-    elpy                            ;; Emacs lisp Python environment
-    flycheck                        ;; On the fly syntax check. better than flymake
-    blacken                         ;; Black formatting on save
-    pyimport                        ;; Remove unwanted python imports
-    pyimpsort                       ;; Sort python import
-    magit                           ;; Git support
-    powerline                       ;; Powerline
-    counsel                         ;; ivy, swiper and counsel in one package
-    yasnippet                       ;; snippets
-    yasnippet-snippets              ;; pre-made snippets
-    move-text                       ;; move text around. M-up and M-down
-    py-isort                        ;; better than pyimpsort. remove the other one later
-    projectile                      ;; project support
-    counsel-projectile              ;; counsel UI for projectile
-    )
-  )
-
-;; Scans the list in myPackages
-;; If the package listed is not already installed, install it
-(mapc #'(lambda (package)
-          (unless (package-installed-p package)
-            (package-install package)))
-      myPackages)
+;; use-package is the only package we will install via
+;; package-install. All other packages will be installed via
+;; use-package later
+(when (not (package-installed-p 'use-package))
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 
-;; ===================================
-;; Basic Customization
-;; ===================================
-
-;;(setq inhibit-startup-message t)    ;; Hide the startup message
-(load-theme 'material t)            ;; Load material theme
-(global-linum-mode t)               ;; Enable line numbers globally
-(setq linum-format "%4d \u2502 ")   ;; Add seperator line after line number
-(setq make-backup-files nil)        ;; Don't create backup files
-(setq create-lockfiles nil)         ;; Don't create lock files
-(setq auto-save-default nil)        ;; Don't create auto save files
-(powerline-default-theme)           ;; enable powerline
-(move-text-default-bindings)        ;; Move text package default configuration. M - up/down
-(yas-global-mode 1)                 ;; Enable snippets
-(menu-bar-mode -1)                  ;; Disable menu bar
-(tool-bar-mode -1)                  ;; Disable toolbar
-(add-to-list 'default-frame-alist '(fullscreen . maximized)) ;;Start maximized
-(setq inhibit-startup-screen t)
-(setq-default cursor-type 'bar)     ;; Bar cursor rather than block
-(setq ring-bell-function 'ignore)   ;; disable alarm bell
-(winner-mode 1)                     ;; enable winner mode
-
-;; ===================================
-;; Custom key rebindings
-;; ===================================
-(global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "M-p") 'aks-yank-line-below)
-(global-set-key (kbd "C-x g") 'magit-status)
-
-
-;; ===================================
-;; IDO mode customization
-;; ===================================
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-(ido-mode 1)
-
-
-;; ===================================
-;; Ivy Customization
-;; ===================================
-(ivy-mode 1)
-(setq ivy-use-virtual-buffers t)
-(setq ivy-count-format "(%d/%d) ")
-
-;; ===================================
-;; Projectile Customization
-;; ===================================
-(require 'projectile)
-(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(projectile-mode +1)
-(counsel-projectile-mode)
-
-;; ====================================
-;; TREEMACS Customization
-;; ====================================
-;; The default width and height of the icons is 22 pixels. If you are
-;; using a Hi-DPI display, uncomment this to double the icon size.
-;;(treemacs-resize-icons 44)
-
-
-
-;; ====================================
-;; Development Setup
-;; ====================================
-;; Enable elpy
-(elpy-enable)
-;; Enable Flycheck 
-(when (require 'flycheck nil t) 
-(setq elpy-modules (delq 'elpy-module-flymake elpy-modules)) 
-(add-hook 'elpy-mode-hook 'flycheck-mode))
-
-;; Format code and cleanup on save
-(add-hook 'python-mode-hook
-	  (lambda ()
-	    (add-hook 'before-save-hook 'pyimport-remove-unused)
-	    (add-hook 'before-save-hook 'py-isort-before-save)
-	    (add-hook 'before-save-hook 'blacken-buffer)))
-
-
-;;(add-hook 'before-save-hook 'pyimpsort-buffer)
-
-
-
-;; User-Defined init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (material-theme better-defaults))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-
-
-(defun aks-yank-line-below ()
-  "copy current line and yank it to the next line.
-Cursor doesn't move."
-  (interactive)
-  (setq init-point (point))
-  (save-excursion
-    (beginning-of-line)
-    (setq beg-point (point))
-    (end-of-line)
-    (setq end-point (point))
-    (setq line-text (delete-and-extract-region end-point beg-point))
-    (insert line-text)
-    (newline)
-    (insert line-text))
-  (goto-char init-point))
+;; Our main stuff happens in the core directory.
+(add-to-list 'load-path "~/.emacs.d/core/")
+(require 'core-essentials)
+(require 'core-ido)
+(require 'core-key-bindings)
+(require 'core-autocomplete)
+(require 'core-python)

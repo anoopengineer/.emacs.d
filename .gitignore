@@ -52,3 +52,7 @@ projectile-bookmarks.eld
 transient
 ido.last
 recentf
+/.cache/
+/places
+/.lsp-session-v1
+/custom.el
